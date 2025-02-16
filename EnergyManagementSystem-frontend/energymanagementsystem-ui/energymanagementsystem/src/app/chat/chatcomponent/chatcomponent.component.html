@@ -1,0 +1,14 @@
+<div class="container mt-3">
+  <ul>
+    <li *ngFor="let msg of messages">
+      <strong>{{ msg.user }}</strong>: {{ msg.message }}
+    </li>
+  </ul>
+
+  <input
+    [(ngModel)]="newMessage"
+    name="newMessage"
+    placeholder="Type a message..."
+  />
+  <button (click)="sendMessage()">Send</button>
+</div>

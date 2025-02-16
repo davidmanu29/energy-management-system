@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8086:80"  
+    environment:
+      - BACKEND_USER=http://localhost/userms
+      - BACKEND_DEVICE=http://localhost/devicems
+    networks:
+      demo_net:
+        ipv4_address: 172.30.0.9
+    extra_hosts:
+      - "userms.localhost:172.30.0.1"
+      - "devicems.localhost:172.30.0.1"
+
+networks:
+  demo_net:
+    external: true

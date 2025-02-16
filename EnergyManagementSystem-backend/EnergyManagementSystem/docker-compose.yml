@@ -1,0 +1,163 @@
+version: '3.8'
+
+services:
+
+  traefik:
+    image: "traefik:v2.10"
+    container_name: "traefik"
+    command:
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.web.address=:80"
+    ports:
+      - "80:80"
+      - "8080:8080"
+    networks:
+      - demo_net
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.traefik-dashboard.rule=Host(`traefik.localhost`)"
+      - "traefik.http.routers.traefik-dashboard.service=api@internal"
+
+  usermsdb:
+    image: "mcr.microsoft.com/mssql/server:2019-latest"
+    environment:
+      ACCEPT_EULA: Y
+      SA_PASSWORD: "MyP@ssword!"
+    ports:
+      - "1436:1433"
+    networks:
+      - demo_net
+    volumes:
+      - usermsdb_data:/var/opt/mssql
+
+  devicemsdb:
+    image: "mcr.microsoft.com/mssql/server:2019-latest"
+    environment:
+      ACCEPT_EULA: Y
+      SA_PASSWORD: "MyP@ssword!"
+    ports:
+      - "1437:1433"
+    networks:
+      - demo_net
+    volumes:
+      - devicemsdb_data:/var/opt/mssql
+
+  monitordb:
+    image: "mcr.microsoft.com/mssql/server:2019-latest"
+    environment:
+      ACCEPT_EULA: Y
+      SA_PASSWORD: "MyP@ssword!"
+    ports:
+      - "1438:1433"
+    networks:
+      - demo_net
+    volumes:
+      - monitordb_data:/var/opt/mssql
+
+  userms:
+    build:
+      context: .
+      dockerfile: ./EnergyManagementSystemUser/Dockerfile
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_URLS: http://+:80
+      UserDbConnectionString: "Server=usermsdb;Database=EnergyManagementSystemUser;User Id=sa;Password=MyP@ssword!;Encrypt=false;TrustServerCertificate=true;MultipleActiveResultSets=true;"
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.userms.rule=PathPrefix(`/userms`)"
+      - "traefik.http.services.userms.loadbalancer.server.port=80"
+      - "traefik.http.middlewares.userms-stripprefix.stripprefix.prefixes=/userms"
+      - "traefik.http.routers.userms.middlewares=userms-stripprefix"
+    depends_on:
+      - usermsdb
+    networks:
+      - demo_net
+
+  devicems:
+    build:
+      context: .
+      dockerfile: ./EnergyManagementSystemDevice/Dockerfile
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_URLS: http://+:80
+      DeviceDbConnectionString: "Server=devicemsdb;Database=EnergyManagementSystemDevice;User Id=sa;Password=MyP@ssword!;Encrypt=false;TrustServerCertificate=true;MultipleActiveResultSets=true;"
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.devicems.rule=PathPrefix(`/devicems`)"
+      - "traefik.http.services.devicems.loadbalancer.server.port=80"
+      - "traefik.http.middlewares.devicems-stripprefix.stripprefix.prefixes=/devicems"
+      - "traefik.http.routers.devicems.middlewares=devicems-stripprefix"
+    depends_on:
+      - devicemsdb
+    networks:
+      - demo_net
+
+  monitorms:
+    build:
+      context: .
+      dockerfile: ./EnergyManagementSystemMonitoring/Dockerfile
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_URLS: http://+:80
+      MonitorDbConnectionString: "Server=monitordb;Database=EnergyManagementSystemMonitoring;User Id=sa;Password=MyP@ssword!;Encrypt=false;TrustServerCertificate=true;MultipleActiveResultSets=true;"
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.monitorms.rule=PathPrefix(`/monitorms`)"
+      - "traefik.http.services.monitorms.loadbalancer.server.port=80"
+      - "traefik.http.middlewares.monitorms-stripprefix.stripprefix.prefixes=/monitorms"
+      - "traefik.http.routers.monitorms.middlewares=monitorms-stripprefix"
+    depends_on:
+      - monitordb
+      - rabbitmq
+    networks:
+      - demo_net
+
+  rabbitmq:
+     image: rabbitmq:management
+     container_name: rabbitmq
+     ports:
+        - "5672:5672"
+        - "15672:15672"
+     environment:
+        RABBITMQ_DEFAULT_USER: myuser
+        RABBITMQ_DEFAULT_PASS: mypassword
+     networks:
+        - demo_net
+
+  chatms:
+    build:
+      context: .
+      dockerfile: ./EnergyManagementSystemChat/Dockerfile
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_URLS: http://+:80
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.chatms.rule=PathPrefix(`/chatms`)"
+      - "traefik.http.services.chatms.loadbalancer.server.port=80"
+      - "traefik.http.middlewares.chatms-stripprefix.stripprefix.prefixes=/chatms"
+      - "traefik.http.routers.chatms.middlewares=chatms-stripprefix"
+    networks:
+      - demo_net
+
+networks:
+  demo_net:
+    external: true
+
+volumes:
+  usermsdb_data:
+  devicemsdb_data:
+  monitordb_data:  

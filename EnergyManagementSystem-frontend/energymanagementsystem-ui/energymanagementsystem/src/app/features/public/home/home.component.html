@@ -1,0 +1,20 @@
+<div class="container">
+    <table class="table table-bordered mt-3" *ngIf="devices$ | async as devices">
+        <thead>
+          <tr>
+            <th>Device ID</th>
+            <th>Address</th>
+            <th>Description</th>
+            <th>Max Consumption (kWh)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let device of devices">
+            <td>{{ device.deviceId }}</td>
+            <td>{{ device.address }}</td>
+            <td>{{ device.description }}</td>
+            <td>{{ device.maxConsumptionPerHour }}</td>
+          </tr>
+        </tbody>
+      </table>
+</div>

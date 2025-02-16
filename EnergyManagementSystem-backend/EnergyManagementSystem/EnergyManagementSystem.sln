@@ -1,0 +1,61 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.9.34701.34
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EnergyManagementSystemUser", "EnergyManagementSystemUser\EnergyManagementSystemUser.csproj", "{7163A1E7-7707-4D41-92C4-24D7778FD423}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EnergyManagementSystemDevice", "EnergyManagementSystemDevice\EnergyManagementSystemDevice.csproj", "{3886D08D-3FCC-48B0-8211-33D9F0CAEBB4}"
+EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{E457C4C1-5ED0-4C83-8DBE-FA63909D89D3}"
+	ProjectSection(ProjectDependencies) = postProject
+		{66112C4F-57A0-4C6C-83FB-B14B35A52936} = {66112C4F-57A0-4C6C-83FB-B14B35A52936}
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EnergyManagementSystemSender", "EnergyManagementSystemSender\EnergyManagementSystemSender.csproj", "{F4B4AA58-516E-47D3-A9D5-7D0F83E09189}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EnergyManagementSystemMonitoring", "EnergyManagementSystemMonitoring\EnergyManagementSystemMonitoring.csproj", "{66112C4F-57A0-4C6C-83FB-B14B35A52936}"
+	ProjectSection(ProjectDependencies) = postProject
+		{3886D08D-3FCC-48B0-8211-33D9F0CAEBB4} = {3886D08D-3FCC-48B0-8211-33D9F0CAEBB4}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EnergyManagementSystemChat", "EnergyManagementSystemChat\EnergyManagementSystemChat.csproj", "{50B3AC58-265B-46ED-B759-BBB75B758C99}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7163A1E7-7707-4D41-92C4-24D7778FD423}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7163A1E7-7707-4D41-92C4-24D7778FD423}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7163A1E7-7707-4D41-92C4-24D7778FD423}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7163A1E7-7707-4D41-92C4-24D7778FD423}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3886D08D-3FCC-48B0-8211-33D9F0CAEBB4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3886D08D-3FCC-48B0-8211-33D9F0CAEBB4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3886D08D-3FCC-48B0-8211-33D9F0CAEBB4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3886D08D-3FCC-48B0-8211-33D9F0CAEBB4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E457C4C1-5ED0-4C83-8DBE-FA63909D89D3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E457C4C1-5ED0-4C83-8DBE-FA63909D89D3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E457C4C1-5ED0-4C83-8DBE-FA63909D89D3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E457C4C1-5ED0-4C83-8DBE-FA63909D89D3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F4B4AA58-516E-47D3-A9D5-7D0F83E09189}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F4B4AA58-516E-47D3-A9D5-7D0F83E09189}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F4B4AA58-516E-47D3-A9D5-7D0F83E09189}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F4B4AA58-516E-47D3-A9D5-7D0F83E09189}.Release|Any CPU.Build.0 = Release|Any CPU
+		{66112C4F-57A0-4C6C-83FB-B14B35A52936}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{66112C4F-57A0-4C6C-83FB-B14B35A52936}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{66112C4F-57A0-4C6C-83FB-B14B35A52936}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{66112C4F-57A0-4C6C-83FB-B14B35A52936}.Release|Any CPU.Build.0 = Release|Any CPU
+		{50B3AC58-265B-46ED-B759-BBB75B758C99}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{50B3AC58-265B-46ED-B759-BBB75B758C99}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{50B3AC58-265B-46ED-B759-BBB75B758C99}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{50B3AC58-265B-46ED-B759-BBB75B758C99}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A1F38B4C-C4E0-4E3A-8EDB-5C2A8574CC7D}
+	EndGlobalSection
+EndGlobal
